@@ -27,11 +27,14 @@
 
     <li class="dropdown ms-2">
         <a class="rounded-circle" href="#!" role="button" id="dropdownUser" data-bs-toggle="dropdown"
-           aria-haspopup="true" aria-expanded="false">
-            <div class="avatar avatar-md avatar-indicators avatar-online">
-                <img alt="avatar" src="{{ asset('backend/assets/images/avatar/avatar-11.jpg') }}" class="rounded-circle" />
-            </div>
-        </a>
+   aria-haspopup="true" aria-expanded="false">
+    <div class="avatar avatar-md avatar-indicators avatar-online">
+        <img alt="avatar" 
+             src="{{ Auth::user()->profile_photo_url }}" 
+             class="rounded-circle" width="40" height="40" />
+    </div>
+</a>
+
 
         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
             <div class="px-4 pb-0 pt-2">

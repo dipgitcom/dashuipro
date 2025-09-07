@@ -5,6 +5,15 @@
 @section('content')
 <div class="container-fluid py-4">
 
+
+    <!-- Update Profile Information -->
+    <div class="p-4 sm:p-8 bg-white shadow-sm sm:rounded-lg mb-4">
+        <h3 class="fw-bold mb-3">Profile Settings</h3>
+        <div class="max-w-xl">
+            @include('backend.profile.partials.profile-header', ['user' => $user])
+        </div>
+    </div>
+
     <!-- Update Profile Information -->
     <div class="p-4 sm:p-8 bg-white shadow-sm sm:rounded-lg mb-4">
         <h3 class="fw-bold mb-3">Update Profile Information</h3>

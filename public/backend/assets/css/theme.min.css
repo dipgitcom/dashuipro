@@ -6676,14 +6676,14 @@ fieldset:disabled .btn {
 /* Main page wrapper */
 .page-wrapper {
     transition: margin-left 0.3s ease;
-    margin-left: 250px; /* full sidebar width */
-    padding: 20px;
+    margin-left: 195px; /* full sidebar width */
+    padding: 60px;
 }
 
 /* When sidebar is collapsed */
 .navbar-vertical.collapsed + .page-wrapper,
 .sidebar.collapsed + .page-wrapper {
-    margin-left: 80px; /* collapsed sidebar width */
+    margin-left: 150px; /* collapsed sidebar width */
 }
 
 /* Mobile responsiveness */

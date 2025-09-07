@@ -1,21 +1,19 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Profile Information') }}
-        </h2>
-
-        <p class="mt-1 text-sm text-gray-600">
-            {{ __("Update your account's profile information and email address.") }}
-        </p>
-    </header>
-
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
-
-    <form method="POST" action="{{ route('profile.update') }}">
+<form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
     @csrf
     @method('PATCH')
+
+    <!-- Profile Photo -->
+    <div class="mb-3">
+        <label for="profile_photo" class="form-label">Profile Photo</label>
+        <input type="file" name="profile_photo" id="profile_photo"
+               class="form-control @error('profile_photo') is-invalid @enderror">
+        @error('profile_photo')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+ 
+
 
     <!-- Name -->
     <div class="mb-3">
@@ -41,5 +39,3 @@
 
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
-
-</section>

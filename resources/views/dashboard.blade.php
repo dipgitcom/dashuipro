@@ -4,10 +4,18 @@
 
 @section('content')
 <div class="page-wrapper">
-    <div class="greeting-box p-4 mb-4 rounded-3 shadow-sm bg-light text-center">
-        <h3 class="fw-bold mb-1">👋 Hey {{ Auth::user()->name ?? 'Guest' }}!</h3>
-        <p class="text-muted mb-2" id="greetingText">🌞 Have a wonderful day ahead!</p>
-        <p class="fw-semibold">🕒 <span id="currentTime"></span></p>
+    <div class="greeting-card shadow-lg rounded-4 bg-gradient-light p-5">
+        <h2 class="fw-bold mb-2">👋 Hello, {{ Auth::user()->name ?? 'Guest' }}!</h2>
+        <p class="lead mb-3" id="greetingText">🌞 Have a wonderful day ahead!</p>
+        <p class="fw-semibold fs-5">🕒 <span id="currentTime"></span></p>
+        <div class="mt-4 d-flex flex-wrap gap-2">
+            <a href="{{ route('dynamic.index') }}" class="btn btn-primary me-2 shadow-sm">
+                <i class="bi bi-file-text me-1"></i> Manage Pages
+            </a>
+            <a href="{{ route('profile.edit') }}" class="btn btn-outline-secondary shadow-sm">
+                <i class="bi bi-person-circle me-1"></i> Profile
+            </a>
+        </div>
     </div>
 </div>
 
@@ -15,10 +23,10 @@
 function updateGreeting() {
     const hour = new Date().getHours();
     let greeting = "🌞 Have a wonderful day ahead!";
-    if(hour>=5 && hour<12) greeting = "☀️ Good Morning!";
-    else if(hour>=12 && hour<15) greeting = "🌤 Good Noon!";
-    else if(hour>=15 && hour<18) greeting = "🌤 Good Afternoon!";
-    else if(hour>=18 && hour<21) greeting = "🌙 Good Evening!";
+    if(hour >= 5 && hour < 12) greeting = "☀️ Good Morning!";
+    else if(hour >= 12 && hour < 15) greeting = "🌤 Good Noon!";
+    else if(hour >= 15 && hour < 18) greeting = "🌤 Good Afternoon!";
+    else if(hour >= 18 && hour < 21) greeting = "🌙 Good Evening!";
     else greeting = "🌙 Good Night!";
     document.getElementById("greetingText").innerText = greeting;
 }
@@ -34,17 +42,18 @@ setInterval(updateTime, 1000);
 </script>
 
 <style>
-/* Page wrapper: adjusts with sidebar */
+/* Page wrapper respects sidebar width */
 .page-wrapper {
+    margin-left: 100px; /* full sidebar width */
     transition: margin-left 0.3s ease;
-    margin-left: 250px; /* full sidebar width */
-    padding: 20px;
+    min-height: 100vh;
+    padding: 30px;
 }
 
-/* When sidebar is collapsed */
+/* Collapsed sidebar adjustments */
 .navbar-vertical.collapsed + .page-wrapper,
 .sidebar.collapsed + .page-wrapper {
-    margin-left: 80px; /* collapsed sidebar width */
+    margin-left: 100px;
 }
 
 /* Mobile responsiveness */
@@ -55,15 +64,38 @@ setInterval(updateTime, 1000);
     }
 }
 
-/* Center the greeting box */
-.greeting-box {
-    max-width: 600px;
-    margin: 40px auto; /* center horizontally */
-    background-color: #f8f9fa; /* light background */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    text-align: center;
+/* Greeting card stretches to fill remaining space */
+.greeting-card {
+    width: 100%;
+    background: linear-gradient(135deg, #ffffff, #f1f3f6);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.greeting-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+/* Typography */
+.greeting-card h2 {
+    font-size: 2rem;
+    color: #1b263b;
+}
+.greeting-card p {
+    font-size: 1.1rem;
+    color: #4b5d6b;
+}
+
+/* Buttons */
+.greeting-card .btn {
+    min-width: 160px;
+    font-weight: 500;
+    border-radius: 50px;
+}
+.greeting-card .btn i {
+    vertical-align: middle;
 }
 </style>
 @endsection

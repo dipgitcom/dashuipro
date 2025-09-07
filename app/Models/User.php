@@ -18,10 +18,12 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    'name',
+    'email',
+    'password',
+    'profile_photo',   // 👈 add this
+];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -45,4 +47,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+public function getProfilePhotoUrlAttribute()
+{
+    if ($this->profile_photo) {
+        return asset('storage/' . $this->profile_photo);
+    }
+    return asset('backend/assets/images/avatar/avatar-11.jpg'); // fallback default
+}
+
+
+
+
 }
