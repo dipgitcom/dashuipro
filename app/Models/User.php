@@ -2,33 +2,33 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+// ✅ Add Spatie HasRoles trait
+use Spatie\Permission\Traits\HasRoles;
+
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
-    'name',
-    'email',
-    'password',
-    'profile_photo',   // 👈 add this
-];
-
+        'name',
+        'email',
+        'password',
+        'profile_photo', // profile photo
+    ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
@@ -36,7 +36,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
      * @return array<string, string>
      */
@@ -48,15 +48,14 @@ class User extends Authenticatable
         ];
     }
 
-public function getProfilePhotoUrlAttribute()
-{
-    if ($this->profile_photo) {
-        return asset('storage/' . $this->profile_photo);
+    /**
+     * Accessor for profile photo URL
+     */
+    public function getProfilePhotoUrlAttribute()
+    {
+        if ($this->profile_photo) {
+            return asset('storage/' . $this->profile_photo);
+        }
+        return asset('backend/assets/images/avatar/avatar-11.jpg'); // fallback default
     }
-    return asset('backend/assets/images/avatar/avatar-11.jpg'); // fallback default
-}
-
-
-
-
 }

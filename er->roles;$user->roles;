@@ -1,0 +1,12 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#6146
+    [34mid[39m: [35m1[39m,
+    [34mname[39m: "[32mDipraj Dhar[39m",
+    [34memail[39m: "[32mdhardipraj001@gmail.com[39m",
+    [34mprofile_photo[39m: "[32mprofile-photos/DuPvxa3XlpQZzpjCm4lOnxDdC1SIuvcljQ1qmkJn.jpg[39m",
+    [34memail_verified_at[39m: [36mnull[39m,
+    #[33mpassword[39m: "[32m$2y$12$bG1BxUTzZoTpBi5wHZp.0.z7Cs.roEvb.bnOtCLf3B.18jMS3aIeK[39m",
+    #[33mremember_token[39m: "[32m4pVwgofgg8I9sIm7vXKYNyji9GFVK3sclHtIx8z7wvcBeRdUdMcP98IlUOZU[39m",
+    [34mcreated_at[39m: "[32m2025-09-05 18:19:18[39m",
+    [34mupdated_at[39m: "[32m2025-09-06 18:33:16[39m",
+  }
+

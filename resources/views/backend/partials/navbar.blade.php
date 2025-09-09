@@ -29,9 +29,9 @@
         <a class="rounded-circle" href="#!" role="button" id="dropdownUser" data-bs-toggle="dropdown"
    aria-haspopup="true" aria-expanded="false">
     <div class="avatar avatar-md avatar-indicators avatar-online">
-        <img alt="avatar" 
-             src="{{ Auth::user()->profile_photo_url }}" 
-             class="rounded-circle" width="40" height="40" />
+        <img src="{{ Auth::check() ? Auth::user()->profile_photo_url : asset('backend/assets/images/default-avatar.png') }}" 
+     alt="Profile Photo" class="rounded-circle" width="40" height="40">
+
     </div>
 </a>
 
