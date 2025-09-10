@@ -9,14 +9,15 @@
             <div class="card border-0 shadow-sm rounded-3 w-100">
 
                 {{-- Card Header --}}
-                <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 text-primary fw-bold">
-                        <i class="bi bi-plus-circle me-2"></i> Add New Dynamic Page
-                    </h5>
-                    <a href="{{ route('dynamic.index') }}" class="btn btn-sm btn-secondary">
-                        <i class="bi bi-arrow-left-circle me-1"></i> Back
-                    </a>
-                </div>
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center shadow-sm rounded-top">
+    <h5 class="mb-0 fw-bold text-white">
+        <i class="bi bi-plus-circle me-2"></i> Add New Dynamic Page
+    </h5>
+    <a href="{{ route('dynamic.index') }}" class="btn btn-light btn-sm">
+        <i class="bi bi-arrow-left-circle me-1"></i> Back
+    </a>
+</div>
+
 
                 {{-- Form Body --}}
                 <div class="card-body">

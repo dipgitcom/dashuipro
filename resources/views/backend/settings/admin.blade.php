@@ -3,8 +3,9 @@
 @section('content')
 <div class="container py-4">
     <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Admin Settings</h4>
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    
+            <h5 class="mb-0 fw-bold text-white">Admin Settings</h5>
         </div>
         <div class="card-body">
             
@@ -71,7 +72,7 @@
                 </div>
 
                 <div class="text-end">
-                    <button type="submit" class="btn btn-success">
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-save me-1"></i> Save Settings
                     </button>
                 </div>

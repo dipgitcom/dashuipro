@@ -1,5 +1,5 @@
 <div class="p-4 sm:p-8 bg-white shadow-sm sm:rounded-lg mb-4">
-    <h3 class="fw-bold mb-3">Update Password</h3>
+    
     <form method="POST" action="{{ route('password.update') }}">
         @csrf
         @method('PUT')

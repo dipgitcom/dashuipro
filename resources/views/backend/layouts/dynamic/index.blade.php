@@ -9,14 +9,15 @@
             <div class="card border-0 shadow-sm rounded-3 w-100">
 
                 {{-- Header --}}
-                <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 text-primary fw-bold">
-                        <i class="bi bi-files me-2"></i> All Dynamic Pages
-                    </h5>
-                    <a href="{{ route('dynamic.create') }}" class="btn btn-sm btn-primary">
-                        <i class="bi bi-plus-circle me-1"></i> Add New Page
-                    </a>
-                </div>
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+    <h5 class="mb-0 fw-bold text-white">
+        <i class="bi bi-files me-2"></i> All Dynamic Pages
+    </h5>
+    <a href="{{ route('dynamic.create') }}" class="btn btn-light btn-sm">
+        <i class="bi bi-plus-circle me-1"></i> Add New Page
+    </a>
+</div>
+
 
                 {{-- Success Message --}}
                 @if(session('success'))
@@ -29,7 +30,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="dynamicPagesTable" class="table table-bordered table-hover align-middle mb-0">
-                            <thead class="table-light">
+                            <thead class="table-primary">
                                 <tr>
                                     <th>#</th>
                                     <th>Title</th>

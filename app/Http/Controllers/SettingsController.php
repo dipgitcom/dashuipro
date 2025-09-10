@@ -7,6 +7,15 @@ use Illuminate\Support\Facades\File;
 
 class SettingsController extends Controller
 {
+    public function __construct()
+{
+    $this->middleware('auth');
+
+    // Middleware for permission-based access
+    $this->middleware('can:settings_manage');
+}
+
+
     /**
      * Show Mail Settings form
      */
@@ -27,7 +36,7 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update Mail Settings and save to .env
+     * Update Mail Settings
      */
     public function mailstore(Request $request)
     {
@@ -50,9 +59,7 @@ class SettingsController extends Controller
             }
 
             $envContent = File::get($envPath);
-            $lineBreak = "\n";
 
-            // Replace or add variables
             $envContent = preg_replace([
                 '/MAIL_MAILER=(.*)/',
                 '/MAIL_HOST=(.*)/',
@@ -99,17 +106,12 @@ class SettingsController extends Controller
     }
 
     /**
-     * Update Admin Settings and save to .env
+     * Update Admin Settings
      */
     public function updateAdmin(Request $request)
     {
-        $data = $request->only([
-            'APP_NAME',
-            'APP_DEBUG',
-            'APP_URL',
-        ]);
+        $data = $request->only(['APP_NAME', 'APP_DEBUG', 'APP_URL']);
 
-        // Handle file uploads
         if ($request->hasFile('APP_LOGO')) {
             $logoPath = $request->file('APP_LOGO')->store('uploads', 'public');
             $data['APP_LOGO'] = '/storage/' . $logoPath;
@@ -120,17 +122,15 @@ class SettingsController extends Controller
             $data['APP_FAVICON'] = '/storage/' . $faviconPath;
         }
 
-        // Update .env
         $this->updateEnv($data);
 
-        // Clear config cache
         \Artisan::call('config:clear');
 
         return back()->with('success', 'Admin settings updated successfully.');
     }
 
     /**
-     * Helper method to update .env file
+     * Helper method to update .env
      */
     private function updateEnv(array $data)
     {
@@ -147,10 +147,8 @@ class SettingsController extends Controller
             $replacement = $key . '=' . $value;
 
             if (preg_match($pattern, $content)) {
-                // Replace existing key
                 $content = preg_replace($pattern, $replacement, $content);
             } else {
-                // Append new key at the end
                 $content .= "\n{$replacement}";
             }
         }

@@ -1,5 +1,5 @@
 <div class="p-4 sm:p-8 bg-white shadow-sm sm:rounded-lg mb-4">
-    <h3 class="fw-bold mb-3 text-danger">Delete Account</h3>
+    
     <p class="text-muted">
         Once your account is deleted, all of its resources and data will be permanently deleted. 
         Please enter your password to confirm deletion.
