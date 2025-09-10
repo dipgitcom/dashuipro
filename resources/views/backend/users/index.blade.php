@@ -4,91 +4,86 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-11">
-            <div class="card border-0 shadow-sm rounded-3">
-
-                {{-- Card Header --}}
+    <div class="row">
+        <!-- Left Panel: Users List -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm rounded-3">
                 <div class="card-header bg-white border-bottom-0 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 text-primary fw-bold">
-                        <i class="bi bi-people me-2"></i> All Users
-                    </h5>
+                    <h5 class="mb-0 text-primary fw-bold"><i class="bi bi-people me-2"></i> Users</h5>
                     <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">
-                        <i class="bi bi-plus-circle me-1"></i> Add New User
+                        <i class="bi bi-plus-circle me-1"></i> Add User
                     </a>
                 </div>
-
-                {{-- Success Message --}}
-                @if(session('success'))
-                    <div class="alert alert-success m-3">{{ session('success') }}</div>
-                @endif
-
-                {{-- Table --}}
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table id="usersTable" class="table table-bordered table-hover align-middle mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Created At</th>
-                                    <th class="text-center">Actions</th>
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($users as $u)
+                                <tr @if(isset($selectedUser) && $selectedUser->id == $u->id) class="table-primary" @endif>
+                                    <td>
+                                        <a href="{{ route('users.index', ['selected' => $u->id]) }}">
+                                            {{ $u->name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ $u->email }}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($users as $user)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $user->name }}</td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->created_at->format('Y-m-d') }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-warning me-1">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
-                                            <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5" class="text-center text-muted">No users found.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+        </div>
 
+        <!-- Right Panel: User Details -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm rounded-3">
+                <div class="card-header bg-white border-bottom-0">
+                    <h5 class="mb-0 text-primary fw-bold">User Details</h5>
+                </div>
+                <div class="card-body">
+                    @if(isset($selectedUser))
+                        <form action="{{ route('users.update', $selectedUser->id) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input type="text" name="name" class="form-control" value="{{ $selectedUser->name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" name="email" class="form-control" value="{{ $selectedUser->email }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Roles (comma-separated)</label>
+                                <input type="text" name="roles" class="form-control" value="{{ $selectedUser->roles->pluck('name')->join(', ') }}">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Password (leave blank to keep current)</label>
+                                <input type="password" name="password" class="form-control">
+                            </div>
+
+                            <button type="submit" class="btn btn-success me-2">Save Changes</button>
+                        </form>
+
+                        <form action="{{ route('users.destroy', $selectedUser->id) }}" method="POST" class="mt-3">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">
+                                Delete User
+                            </button>
+                        </form>
+                    @else
+                        <p class="text-muted">Select a user from the list to view and edit details.</p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>
 </div>
 @endsection
-
-@push('scripts')
-<!-- DataTables CSS & JS -->
-<link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('#usersTable').DataTable({
-            responsive: true,
-            pageLength: 5,
-            order: [[0, 'asc']],
-            language: {
-                search: "_INPUT_",
-                searchPlaceholder: "Search users..."
-            }
-        });
-    });
-</script>
-@endpush

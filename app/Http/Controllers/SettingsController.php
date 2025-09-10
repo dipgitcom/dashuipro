@@ -81,4 +81,80 @@ class SettingsController extends Controller
             return redirect()->back()->with('error', 'Something went wrong: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Show Admin Settings form
+     */
+    public function admin()
+    {
+        $settings = [
+            'APP_NAME'   => env('APP_NAME'),
+            'APP_DEBUG'  => env('APP_DEBUG'),
+            'APP_URL'    => env('APP_URL'),
+            'APP_LOGO'   => env('APP_LOGO'),
+            'APP_FAVICON'=> env('APP_FAVICON'),
+        ];
+
+        return view('backend.settings.admin', compact('settings'));
+    }
+
+    /**
+     * Update Admin Settings and save to .env
+     */
+    public function updateAdmin(Request $request)
+    {
+        $data = $request->only([
+            'APP_NAME',
+            'APP_DEBUG',
+            'APP_URL',
+        ]);
+
+        // Handle file uploads
+        if ($request->hasFile('APP_LOGO')) {
+            $logoPath = $request->file('APP_LOGO')->store('uploads', 'public');
+            $data['APP_LOGO'] = '/storage/' . $logoPath;
+        }
+
+        if ($request->hasFile('APP_FAVICON')) {
+            $faviconPath = $request->file('APP_FAVICON')->store('uploads', 'public');
+            $data['APP_FAVICON'] = '/storage/' . $faviconPath;
+        }
+
+        // Update .env
+        $this->updateEnv($data);
+
+        // Clear config cache
+        \Artisan::call('config:clear');
+
+        return back()->with('success', 'Admin settings updated successfully.');
+    }
+
+    /**
+     * Helper method to update .env file
+     */
+    private function updateEnv(array $data)
+    {
+        $envPath = base_path('.env');
+
+        if (!file_exists($envPath)) {
+            throw new \Exception('.env file not found');
+        }
+
+        $content = file_get_contents($envPath);
+
+        foreach ($data as $key => $value) {
+            $pattern = "/^{$key}=.*/m";
+            $replacement = $key . '=' . $value;
+
+            if (preg_match($pattern, $content)) {
+                // Replace existing key
+                $content = preg_replace($pattern, $replacement, $content);
+            } else {
+                // Append new key at the end
+                $content .= "\n{$replacement}";
+            }
+        }
+
+        file_put_contents($envPath, $content);
+    }
 }

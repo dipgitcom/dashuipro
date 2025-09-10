@@ -7,23 +7,34 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
-
 class UserController extends Controller
 {
+    // public function __construct()
+    // {
+    //     // Only Admins can access this controller
+    //     $this->middleware(['auth', 'role:Admin']);
+    // }
 
     // List all users
-    public function index()
-    {
-        $users = User::latest()->get();
-        return view('backend.users.index', compact('users'));
+    public function index(Request $request)
+{
+    $users = User::latest()->get();
+    $selectedUser = null;
+
+    if ($request->has('selected')) {
+        $selectedUser = User::with('roles')->find($request->selected);
     }
 
-    // Show create user form
-    public function create()
-    {
-        $roles = Role::pluck('name'); // get all roles
-        return view('backend.users.create', compact('roles'));
-    }
+    return view('backend.users.index', compact('users', 'selectedUser'));
+}
+
+public function create()
+{
+    // If using roles
+    $roles = Role::pluck('name');
+
+    return view('backend.users.create', compact('roles'));
+}
 
     // Store new user
     public function store(Request $request)
@@ -54,33 +65,50 @@ class UserController extends Controller
         return view('backend.users.edit', compact('user', 'roles'));
     }
 
-    // Update user
-    public function update(Request $request, User $user)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:6|confirmed',
-            'role' => 'required|string|exists:roles,name',
-        ]);
+    // Update user (supports AJAX)
+public function update(Request $request, User $user)
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'roles' => 'nullable|string', // comma-separated roles for AJAX
+        'password' => 'nullable|string|min:6|confirmed',
+    ]);
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        if ($request->password) {
-            $user->password = Hash::make($request->password);
-        }
-        $user->save();
+    $user->name = $request->name;
+    $user->email = $request->email;
 
-        // Sync role
-        $user->syncRoles([$request->role]);
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
+    }
+    $user->save();
 
-        return redirect()->route('users.index')->with('success', 'User updated successfully.');
+    // Sync roles if using Spatie roles
+    if ($request->has('roles')) {
+        $roleNames = array_filter(array_map('trim', explode(',', $request->roles)));
+        $user->syncRoles($roleNames);
     }
 
-    // Delete user
-    public function destroy(User $user)
-    {
-        $user->delete();
-        return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+    if ($request->ajax()) {
+        return response()->json($user);
     }
+
+    return redirect()->route('users.index')->with('success', 'User updated successfully.');
+}
+
+// Delete user (supports AJAX)
+public function destroy(Request $request, User $user)
+{
+    $user->delete();
+
+    if ($request->ajax()) {
+        return response()->json(['success' => true]);
+    }
+
+    return redirect()->route('users.index')->with('success', 'User deleted successfully.');
+}
+
+
+    
+
 }

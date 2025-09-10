@@ -9,9 +9,7 @@
         <p class="lead mb-3" id="greetingText">🌞 Have a wonderful day ahead!</p>
         <p class="fw-semibold fs-5">🕒 <span id="currentTime"></span></p>
         <div class="mt-4 d-flex flex-wrap gap-2">
-            <a href="{{ route('dynamic.index') }}" class="btn btn-primary me-2 shadow-sm">
-                <i class="bi bi-file-text me-1"></i> Manage Pages
-            </a>
+            
             <a href="{{ route('profile.edit') }}" class="btn btn-outline-secondary shadow-sm">
                 <i class="bi bi-person-circle me-1"></i> Profile
             </a>

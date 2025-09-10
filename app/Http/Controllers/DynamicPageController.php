@@ -10,6 +10,11 @@ class DynamicPageController extends Controller
     /**
      * Display all dynamic pages.
      */
+    // public function __construct()
+    // {
+    // $this->middleware(['auth', 'role:Admin']);
+    // }
+
     public function index()
     {
         $pages = DynamicPage::latest()->get();
