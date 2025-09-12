@@ -66,15 +66,17 @@
                                     <i class="me-2 icon-xxs dropdown-item-icon" data-feather="settings"></i>Settings
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <i class="me-2 icon-xxs dropdown-item-icon" data-feather="power"></i>Sign Out
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </li>
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                             <i class="me-2 icon-xxs dropdown-item-icon" data-feather="power"></i>Sign Out
+                           </a>
+
+                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+                 </form>
+
+
+
                         </ul>
                     </div>
                 </li>

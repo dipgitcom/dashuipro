@@ -23,15 +23,15 @@ class AppServiceProvider extends ServiceProvider
             $view->with('currentRoute', Route::currentRouteName());
         });
 
-        if (Schema::hasTable('settings')) {
-            Config::set('mail.mailers.smtp.transport', get_setting('mail_mailer', 'smtp'));
-            Config::set('mail.mailers.smtp.host', get_setting('mail_host', 'smtp.mailtrap.io'));
-            Config::set('mail.mailers.smtp.port', get_setting('mail_port', 587));
-            Config::set('mail.mailers.smtp.username', get_setting('mail_username'));
-            Config::set('mail.mailers.smtp.password', get_setting('mail_password'));
-            Config::set('mail.from.address', get_setting('mail_from_address', 'admin@example.com'));
-            Config::set('app.name', get_setting('app_name', 'My App'));
-        }
+        // if (Schema::hasTable('settings')) {
+        //     Config::set('mail.mailers.smtp.transport', get_setting('mail_mailer', 'smtp'));
+        //     Config::set('mail.mailers.smtp.host', get_setting('mail_host', 'smtp.mailtrap.io'));
+        //     Config::set('mail.mailers.smtp.port', get_setting('mail_port', 587));
+        //     Config::set('mail.mailers.smtp.username', get_setting('mail_username'));
+        //     Config::set('mail.mailers.smtp.password', get_setting('mail_password'));
+        //     Config::set('mail.from.address', get_setting('mail_from_address', 'admin@example.com'));
+        //     Config::set('app.name', get_setting('app_name', 'My App'));
+        // }
 
         // ✅ Register @role Blade directive
         Blade::directive('role', function ($role) {

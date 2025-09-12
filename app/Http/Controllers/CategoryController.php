@@ -33,28 +33,30 @@ class CategoryController extends Controller
 
     // Store new category
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|max:255|unique:categories,slug',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'status' => 'required|boolean',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'slug' => 'nullable|string|max:255|unique:categories,slug',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-        $slug = $request->slug ?? \Str::slug($request->name);
+    $slug = $request->slug ?? \Str::slug($request->name);
+    $status = $request->has('status') ? 1 : 0;
 
-        $data = $request->only(['name', 'status']);
-        $data['slug'] = $slug;
+    $data = $request->only(['name']);
+    $data['slug'] = $slug;
+    $data['status'] = $status;
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('uploads/categories', 'public');
-            $data['image'] = 'storage/' . $imagePath;
-        }
-
-        Category::create($data);
-
-        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('uploads/categories', 'public');
+        $data['image'] = 'storage/' . $imagePath;
     }
+
+    Category::create($data);
+
+    return redirect()->route('categories.index')->with('success', 'Category created successfully.');
+}
+
 
     // Show edit form
     public function edit(Category $category)

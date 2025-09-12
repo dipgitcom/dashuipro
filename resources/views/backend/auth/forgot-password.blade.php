@@ -13,7 +13,6 @@
         </a>
     </div>
     
-
     <h4 class="mb-3">Forgot Password?</h4>
     <form method="POST" action="{{ route('password.sendOtp') }}">
         @csrf

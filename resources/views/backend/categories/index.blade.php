@@ -16,7 +16,20 @@
                         <i class="bi bi-plus-circle me-1"></i> Add Category
                     </a>
                 </div>
+<div class="card-body p-3">
 
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <select id="statusFilter" class="form-select">
+                                <option value="">All Status</option>
+                                <option value="1">Active</option>
+                                <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" id="searchBox" class="form-control" placeholder="Search categories...">
+                        </div>
+                    </div>
                 <!-- Card Body -->
                 <div class="card-body p-3">
                     <div class="table-responsive">

@@ -10,20 +10,18 @@ class PasswordOtpMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $otp;
-
-    public function __construct($otp)
+    public $user;
+       
+    public function __construct($user)
     {
-        $this->otp = $otp;
+        $this->user = $user;
+       
     }
 
-//     public function build()
-// {
-//     return $this->from(config('mail.from.address'), config('mail.from.name'))
-//                 ->subject('Password Reset OTP')
-//                 ->view('backend.auth.emails.password-otp')
-//                 ->with(['otp' => $this->otp]);
-// }
+    public function build(){
+    return $this->subject('Forget Password Mail')
+                    ->view('backend.auth.emails.password-otp',with(['user'=>$this->user]));
+   }
 
 }
 
