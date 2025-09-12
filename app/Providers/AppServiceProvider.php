@@ -41,5 +41,19 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('endrole', function () {
             return "<?php endif; ?>";
         });
+
+
+    /// Get favicon from settings, fallback to default
+$favicon = get_setting('APP_FAVICON');
+
+if (!$favicon || !file_exists(public_path($favicon))) {
+    // fallback if the uploaded file is missing
+    $favicon = 'backend/uploads/settings/favicon.ico'; // or your preferred default
+}
+
+// Share globally
+View::share('faviconPath', $favicon);
+
+
     }
 }

@@ -4,19 +4,23 @@
 
 @section('content')
 <div class="card shadow-sm p-4 text-center" style="width: 400px;">
-    
+
     <!-- Logo -->
     <div class="mb-4">
         <a href="{{ url('/') }}">
-            <img src="{{ asset('backend/assets/images/brand/logo/logo-2.svg') }}" alt="Logo" class="img-fluid" style="max-height: 60px;">
+            <img src="{{ asset(get_setting('APP_LOGO', 'backend/assets/images/brand/logo/logo-2.svg')) }}" 
+                 alt="{{ get_setting('APP_NAME', 'Dashboard') }}" height="100" />
         </a>
     </div>
 
     <h3 class="mb-4">Login</h3>
-    
-    <!-- Session Status -->
+
+    <!-- Success/Status Message -->
     @if (session('status'))
         <div class="alert alert-success">{{ session('status') }}</div>
+    @endif
+    @if (session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     <form method="POST" action="{{ route('login') }}">
@@ -49,11 +53,10 @@
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
-            @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="text-decoration-none small">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+            <!-- Forgot Password link (updated) -->
+            <a href="{{ route('password.forgotForm') }}" class="text-decoration-none small">
+                {{ __('Forgot your password?') }}
+            </a>
 
             <button type="submit" class="btn btn-primary">
                 {{ __('Log in') }}

@@ -1,10 +1,43 @@
 <div class="app-menu">
     <div class="navbar-vertical navbar nav-dashboard">
         <div class="h-100" data-simplebar>
-            <!-- Brand logo -->
-            <a class="navbar-brand" href="{{ route('dashboard') }}">
-                <img src="{{ asset('backend/assets/images/brand/logo/logo-2.svg') }}" alt="dash ui - bootstrap 5 admin dashboard template" />
-            </a>
+           <!-- Sidebar Brand (Modern Card Style with Hover Animation & Custom Font) -->
+<a href="{{ route('dashboard') }}" class="sidebar-brand d-flex align-items-center px-3 py-2" 
+   style="background:#f8f9fc; border-radius:8px; text-decoration:none; transition: all 0.3s ease;">
+
+    <!-- Logo -->
+    <img src="{{ get_setting('APP_LOGO', asset('assets/images/brand/logo/logo-2.svg')) }}" 
+         alt="App Logo" 
+         style="height:50px; width:auto; object-fit:contain; margin-right:10px; transition: transform 0.3s ease;">
+
+    <!-- App Name with Poppins font -->
+    <span class="fw-bold app-name" style="font-size:1.1rem; color:#4e73df; font-family: 'Poppins', sans-serif; transition: all 0.3s ease;">
+        {{ get_setting('APP_NAME', 'Admin Panel') }}
+    </span>
+
+</a>
+
+<!-- Optional: Google Font (add once in master layout) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+
+<!-- Inline CSS for hover effects -->
+<style>
+.sidebar-brand:hover {
+    background-color: #e2e6f0; /* subtle hover background */
+    transform: translateY(-2px); /* slight lift */
+}
+
+.sidebar-brand img {
+    /* Slight zoom on hover */
+}
+.sidebar-brand:hover img {
+    transform: scale(1.05);
+}
+
+.sidebar-brand:hover .app-name {
+    color: #2e59d9; /* darker blue on hover */
+}
+</style>
 
             <ul class="navbar-nav flex-column" id="sideNavbar">
 

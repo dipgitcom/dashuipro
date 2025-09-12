@@ -6,14 +6,20 @@
     <meta name="author" content="Codescandy" />
 
     <!-- Dynamic Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" 
-          href="{{ asset(env('APP_FAVICON', 'assets/images/favicon/favicon.ico')) }}" />
+   
+<link rel="icon" href="{{ asset(get_setting('APP_FAVICON', 'backend/uploads/settings/favicon.ico')) }}?v={{ time() }}">
+<link rel="shortcut icon" href="{{ asset(get_setting('APP_FAVICON', 'backend/uploads/settings/favicon.ico')) }}?v={{ time() }}">
 
-   <!-- Favicon + CSS -->
+
+
+
+
+    <!-- Styles -->
     @include('backend.partials.style')
 
-    <title>@yield('title', 'Dashboard')</title>
+    <title>@yield('title', get_setting('site_name', 'Admin Panel'))</title>
 </head>
+
 <body>
 <main id="main-wrapper" class="main-wrapper">
     

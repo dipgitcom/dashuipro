@@ -9,8 +9,8 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm border-0 rounded-3">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold text-white">
                         <i class="bi bi-shield-lock me-2"></i> Edit Role
                     </h5>
                     <a href="{{ route('roles.index') }}" class="btn btn-sm btn-light">
@@ -23,7 +23,7 @@
 
     {{-- Edit Role Form --}}
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="card shadow-sm border-0 rounded-3">
                 <div class="card-body">
                     <form action="{{ route('roles.update', $role->id) }}" method="POST">

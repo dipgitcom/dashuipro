@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <!-- Card -->
             <div class="card shadow-sm border-0 rounded-3">
                 <!-- Header -->

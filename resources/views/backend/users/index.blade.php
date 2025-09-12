@@ -7,9 +7,11 @@
     <div class="row g-4">
         <!-- Left Panel: Users List -->
         <div class="col-lg-5">
-            <div class="card shadow-sm border-0 rounded-3">
+            <div class="card shadow border-0 rounded-3">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold text-white"><i class="bi bi-people me-2"></i> Users</h5>
+                    <h5 class="mb-0 fw-bold text-white">
+                        <i class="bi bi-people me-2"></i> Users
+                    </h5>
                     <a href="{{ route('users.create') }}" class="btn btn-light btn-sm">
                         <i class="bi bi-plus-circle me-1"></i> Add
                     </a>
@@ -43,9 +45,11 @@
 
         <!-- Right Panel: User Details -->
         <div class="col-lg-7">
-            <div class="card shadow-sm border-0 rounded-3">
+            <div class="card shadow border-0 rounded-3">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold text-white"><i class="bi bi-person-badge me-2"></i> User Details</h5>
+                    <h5 class="mb-0 fw-bold text-white">
+                        <i class="bi bi-person-badge me-2"></i> User Details
+                    </h5>
                     @if(isset($selectedUser))
                         <form action="{{ route('users.destroy', $selectedUser->id) }}" method="POST" class="mb-0">
                             @csrf
@@ -56,33 +60,39 @@
                         </form>
                     @endif
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     @if(isset($selectedUser))
-                        <form action="{{ route('users.update', $selectedUser->id) }}" method="POST" class="mb-0">
+                        <form action="{{ route('users.update', $selectedUser->id) }}" method="POST">
                             @csrf
                             @method('PUT')
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Name <span class="text-danger">*</span></label>
-                                <input type="text" name="name" class="form-control" value="{{ $selectedUser->name }}" required>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" name="name" class="form-control" value="{{ $selectedUser->name }}" placeholder="Name" required>
+                                        <label>Name <span class="text-danger">*</span></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" name="email" class="form-control" value="{{ $selectedUser->email }}" placeholder="Email" required>
+                                        <label>Email <span class="text-danger">*</span></label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" name="roles" class="form-control" value="{{ $selectedUser->roles->pluck('name')->join(', ') }}" placeholder="Roles">
+                                        <label>Roles</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
+                                        <label>Password</label>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Email <span class="text-danger">*</span></label>
-                                <input type="email" name="email" class="form-control" value="{{ $selectedUser->email }}" required>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Roles</label>
-                                <input type="text" name="roles" class="form-control" value="{{ $selectedUser->roles->pluck('name')->join(', ') }}">
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Password</label>
-                                <input type="password" name="password" class="form-control" placeholder="Leave blank to keep current password">
-                            </div>
-
-                            <div class="d-flex justify-content-end gap-2 mt-3">
+                            <div class="d-flex justify-content-end gap-2 mt-4">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-save me-1"></i> Save Changes
                                 </button>

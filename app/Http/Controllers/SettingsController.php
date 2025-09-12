@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use App\Models\Setting;
+use Illuminate\Support\Facades\Storage;
+
+
 
 class SettingsController extends Controller
 {
@@ -109,25 +113,55 @@ class SettingsController extends Controller
      * Update Admin Settings
      */
     public function updateAdmin(Request $request)
-    {
-        $data = $request->only(['APP_NAME', 'APP_DEBUG', 'APP_URL']);
+{
+    $request->validate([
+        'APP_NAME'   => 'required|string',
+        'APP_URL'    => 'required|url',
+        'APP_DEBUG'  => 'required|in:true,false',
+        'APP_LOGO'   => 'nullable|image|mimes:png,jpg,jpeg,svg,ico|max:2048',
+        'APP_FAVICON'=> 'nullable|image|mimes:png,jpg,jpeg,svg,ico|max:1024',
+    ]);
 
-        if ($request->hasFile('APP_LOGO')) {
-            $logoPath = $request->file('APP_LOGO')->store('uploads', 'public');
-            $data['APP_LOGO'] = '/storage/' . $logoPath;
-        }
+    $data = $request->only(['APP_NAME', 'APP_URL', 'APP_DEBUG']);
 
-        if ($request->hasFile('APP_FAVICON')) {
-            $faviconPath = $request->file('APP_FAVICON')->store('uploads', 'public');
-            $data['APP_FAVICON'] = '/storage/' . $faviconPath;
-        }
+    // Logo upload
+    if ($request->hasFile('APP_LOGO')) {
+        $logoPath = $request->file('APP_LOGO')->store('uploads', 'public');
+        $data['APP_LOGO'] = '/storage/' . $logoPath;
 
-        $this->updateEnv($data);
-
-        \Artisan::call('config:clear');
-
-        return back()->with('success', 'Admin settings updated successfully.');
+        Setting::updateOrCreate(
+            ['key' => 'APP_LOGO'],
+            ['value' => $data['APP_LOGO']]
+        );
     }
+
+    // Favicon upload
+   if ($request->hasFile('APP_FAVICON')) {
+    $favicon = $request->file('APP_FAVICON');
+    $faviconName = 'favicon.' . $favicon->getClientOriginalExtension();
+
+    $favicon->move(public_path('backend/uploads/settings'), $faviconName);
+
+    Setting::updateOrCreate(
+        ['key' => 'APP_FAVICON'],
+        ['value' => 'backend/uploads/settings/' . $faviconName]
+    );
+}
+
+
+    // Save other settings (APP_NAME, APP_URL, APP_DEBUG)
+    foreach ($data as $key => $value) {
+        Setting::updateOrCreate(
+            ['key' => $key],
+            ['value' => $value]
+        );
+    }
+
+    \Cache::flush();
+
+    return back()->with('success', 'Admin settings updated successfully.');
+}
+
 
     /**
      * Helper method to update .env

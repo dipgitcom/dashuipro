@@ -1,6 +1,6 @@
 @extends('backend.master')
 
-@section('title', 'Dashboard')
+@section('title', 'Admin Dashboard')
 
 @section('content')
 <div class="page-wrapper">

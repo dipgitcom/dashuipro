@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'log'),
+    'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -111,8 +111,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'dhardipraj001@gmail.com'),
-        'name' => env('MAIL_FROM_NAME', 'dashuipro'),
+        'address' => env('MAIL_FROM_ADDRESS', 'admin@example.com'),
+        'name' => env('MAIL_FROM_NAME', 'AdminX'),
     ],
 
 ];
