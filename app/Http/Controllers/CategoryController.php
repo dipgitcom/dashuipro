@@ -24,10 +24,10 @@ class CategoryController extends Controller
     public function index(Request $request)
 {
     if ($request->ajax()) {
-        $categories = Category::latest();
+        $categories = Category::query();
 
         return DataTables::of($categories)
-            ->addIndexColumn()
+            ->addIndexColumn() // This adds DT_RowIndex
             ->addColumn('image', function ($row) {
                 return $row->image
                     ? '<img src="' . asset($row->image) . '" width="50" height="50" class="rounded">'
@@ -40,13 +40,11 @@ class CategoryController extends Controller
             })
             ->addColumn('action', function ($row) {
                 $buttons = '';
-
                 if (auth()->user()->can('category_edit')) {
                     $buttons .= '<a href="' . route('categories.edit', $row->id) . '" class="btn btn-sm btn-primary me-1">
                                     <i class="bi bi-pencil-square"></i> Edit
                                  </a>';
                 }
-
                 if (auth()->user()->can('category_delete')) {
                     $buttons .= '<form action="' . route('categories.destroy', $row->id) . '" method="POST" style="display:inline-block;">
                                     ' . csrf_field() . method_field('DELETE') . '
@@ -55,16 +53,22 @@ class CategoryController extends Controller
                                     </button>
                                  </form>';
                 }
-
                 return $buttons;
             })
-            ->rawColumns(['image', 'status', 'action']) // Important: allow HTML
+            ->rawColumns(['image', 'status', 'action'])
+            // IMPORTANT: prevent DT_RowIndex from being searched or ordered
+            ->filterColumn('DT_RowIndex', function($query, $keyword) {
+                // do nothing
+            })
+            ->orderColumn('DT_RowIndex', function($query, $order) {
+                // default ordering by ID or created_at instead
+                $query->orderBy('id', $order);
+            })
             ->make(true);
     }
 
     return view('backend.categories.index');
 }
-
     // Show create form
     public function create()
     {
