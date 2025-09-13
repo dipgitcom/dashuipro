@@ -1,5 +1,4 @@
 <div class="header">
-    <!-- navbar -->
     <div class="navbar-custom navbar navbar-expand-lg">
         <div class="container-fluid px-0">
 
@@ -23,15 +22,23 @@
                 </svg>
             </a>
 
-            <!-- Search / Other -->
-            <div class="d-none d-md-none d-lg-block">
-                <form action="#">
-                    <div class="input-group"></div>
-                </form>
-            </div>
-
             <!-- Navbar nav -->
             <ul class="navbar-nav navbar-right-wrap ms-lg-auto d-flex nav-top-wrap align-items-center ms-4 ms-lg-0">
+
+            
+<!-- Logout (Danger Mode) -->
+<li class="ms-2">
+    <a href="{{ route('logout') }}" class="nav-link p-2 text-danger"
+       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <i data-feather="power"></i>
+    </a>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
+</li>
+
+
+                <!-- Profile Dropdown -->
                 <li class="dropdown ms-2">
                     <a class="rounded-circle" href="#!" role="button" id="dropdownUser" data-bs-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
@@ -40,7 +47,6 @@
                                  alt="Profile Photo" class="rounded-circle" width="40" height="40">
                         </div>
                     </a>
-
                     <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownUser">
                         <div class="px-4 pb-0 pt-2">
                             <div class="lh-1">
@@ -49,7 +55,6 @@
                             </div>
                             <div class="dropdown-divider mt-3 mb-2"></div>
                         </div>
-
                         <ul class="list-unstyled">
                             <li>
                                 <a class="dropdown-item d-flex align-items-center" href="{{ route('profile.edit') }}">
@@ -66,20 +71,10 @@
                                     <i class="me-2 icon-xxs dropdown-item-icon" data-feather="settings"></i>Settings
                                 </a>
                             </li>
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                             <i class="me-2 icon-xxs dropdown-item-icon" data-feather="power"></i>Sign Out
-                           </a>
-
-                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-    @csrf
-                 </form>
-
-
-
                         </ul>
                     </div>
                 </li>
+
             </ul>
 
         </div>

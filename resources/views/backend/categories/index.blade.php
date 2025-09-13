@@ -4,39 +4,21 @@
 
 @section('content')
 <div class="container-fluid py-4">
-    <div class="row justify-content-center">
+    <div class="row">
         <div class="col-12">
             <div class="card shadow border-0 rounded-3">
-                <!-- Card Header -->
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0 fw-bold text-white">
-                        <i class="bi bi-list-ul me-2"></i> Categories List
-                    </h5>
+                    <h5 class="mb-0 fe-bold text-white">Categories List</h5>
                     <a href="{{ route('categories.create') }}" class="btn btn-light btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i> Add Category
+                        <i class="bi bi-plus-circle"></i> Add Category
                     </a>
                 </div>
-<div class="card-body p-3">
-
-                    <div class="row mb-3">
-                        <div class="col-md-3">
-                            <select id="statusFilter" class="form-select">
-                                <option value="">All Status</option>
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="text" id="searchBox" class="form-control" placeholder="Search categories...">
-                        </div>
-                    </div>
-                <!-- Card Body -->
-                <div class="card-body p-3">
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table id="categoriesTable" class="table table-hover align-middle mb-0">
-                            <thead class="table-primary">
+                        <table id="categoryTable" class="table table-striped table-bordered dt-responsive nowrap w-100 align-middle">
+                            <thead class="table-primary text-center">
                                 <tr>
-                                    <th>#</th>
+                                    <th>No</th>
                                     <th>Name</th>
                                     <th>Slug</th>
                                     <th>Image</th>
@@ -44,45 +26,10 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($categories as $key => $category)
-                                    <tr>
-                                        <td>{{ $key + 1 }}</td>
-                                        <td>{{ $category->name }}</td>
-                                        <td>{{ $category->slug }}</td>
-                                        <td>
-                                            @if ($category->image)
-                                                <img src="{{ asset($category->image) }}" alt="{{ $category->name }}"
-                                                     style="width: 60px; height: auto; border-radius:5px; border:1px solid #ddd; padding:2px;">
-                                            @else
-                                                <span class="text-muted fst-italic">No Image</span>
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input status-switch" type="checkbox"
-                                                       data-id="{{ $category->id }}" {{ $category->status ? 'checked' : '' }}>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-sm btn-primary mb-1">
-                                                <i class="bi bi-pencil-square"></i> Edit
-                                            </a>
-                                            <form action="{{ route('categories.destroy', $category->id) }}" method="POST" class="d-inline-block">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger mb-1" onclick="return confirm('Are you sure you want to delete this category?')">
-                                                    <i class="bi bi-trash"></i> Delete
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -91,33 +38,54 @@
 
 @push('scripts')
 <script>
-    $(document).ready(function() {
-        $('#categoriesTable').DataTable({
-            responsive: true,
-            lengthChange: true,
-            pageLength: 10,
-        });
+$(document).ready(function() {
+    var table = $('#categoryTable').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        lengthMenu: [ [10, 25, 50, 100], [10, 25, 50, 100] ],
+        dom: '<"d-flex justify-content-between mb-3"<"me-3"l><"ms-auto"f>B>rtip',
+        buttons: [
+            { extend: 'copy', className: 'btn btn-sm btn-secondary me-1' },
+            { extend: 'excel', className: 'btn btn-sm btn-success me-1' },
+            { extend: 'csv', className: 'btn btn-sm btn-info me-1' },
+            { extend: 'pdf', className: 'btn btn-sm btn-danger me-1' },
+            { extend: 'print', className: 'btn btn-sm btn-primary' }
+        ],
+        ajax: "{{ route('categories.index') }}",
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', className: 'text-center' },
+            { data: 'name', name: 'name' },
+            { data: 'slug', name: 'slug' },
+            { data: 'image', name: 'image', orderable: false, searchable: false, className: 'text-center' },
+            { data: 'status', name: 'status', orderable: false, searchable: false, className: 'text-center' },
+            { data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center' },
+        ],
+        order: [[1, 'asc']],
+        language: {
+            search: "_INPUT_",
+            searchPlaceholder: "Search categories...",
+            lengthMenu: "Show _MENU_ entries"
+        },
+        initComplete: function() {
+            // Style search box
+            $('#categoryTable_filter input').addClass('form-control form-control-sm rounded shadow-sm').css('width', '250px');
 
-        // Optional: toggle status AJAX (requires backend route)
-        $('.status-switch').change(function() {
-            let categoryId = $(this).data('id');
-            let status = $(this).is(':checked') ? 1 : 0;
-
-            $.ajax({
-                url: '/categories/' + categoryId + '/toggle-status',
-                type: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    status: status
-                },
-                success: function(response) {
-                    console.log('Status updated');
-                },
-                error: function() {
-                    alert('Error updating status');
-                }
-            });
-        });
+            // Style length dropdown
+            $('#categoryTable_length select').addClass('form-select form-select-sm rounded shadow-sm').css('width', '80px');
+        },
+        createdRow: function(row, data, dataIndex) {
+            $(row).addClass('align-middle');
+            $(row).hover(
+                function() { $(this).addClass('shadow-sm'); },
+                function() { $(this).removeClass('shadow-sm'); }
+            );
+        },
+        
     });
+
+    // Move buttons container
+    table.buttons().container().appendTo('#categoryTable_wrapper .col-md-6:eq(0)');
+});
 </script>
 @endpush

@@ -11,9 +11,6 @@
 <link rel="shortcut icon" href="{{ asset(get_setting('APP_FAVICON', 'backend/uploads/settings/favicon.ico')) }}?v={{ time() }}">
 
 
-
-
-
     <!-- Styles -->
     @include('backend.partials.style')
 

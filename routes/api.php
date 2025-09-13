@@ -1,14 +1,13 @@
- <?php
+<?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AuthController;
+// use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\Api\AuthController;
 
-// Route::post('login', [AuthController::class, 'login']);
+// // API login
+// Route::post('login', [AuthController::class, 'apiLogin']);
 
-// // Protected API routes
+// // Protected routes (require token)
 // Route::middleware('auth:api')->group(function () {
-//     Route::middleware('auth')->post('/jwt-logout', [AuthController::class, 'logout'])->name('jwt.logout');
-//     Route::get('user', function () {
-//         return auth()->user();
-//     });
+//     Route::post('logout', [AuthController::class, 'apiLogout']);
+//     Route::get('me', [AuthController::class, 'me']); // get logged-in user
 // });

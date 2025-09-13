@@ -5,14 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    // Login via API
-    public function login(Request $request)
+    // API login
+    public function apiLogin(Request $request)
     {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
         $credentials = $request->only('email', 'password');
 
         if (!$token = auth('api')->attempt($credentials)) {
@@ -22,25 +25,11 @@ class AuthController extends Controller
         return $this->respondWithToken($token);
     }
 
-    // Logout
-    public function logout(Request $request)
-{
-    $token = $request->token;
-
-    if ($token) {
-        auth()->guard('api')->setToken($token)->invalidate();
-    }
-
-    session()->forget('jwt_token'); // remove JWT from session
-
-    return redirect('/login')->with('status', 'Logged out successfully.');
-}
-
-
-    // Refresh token
-    public function refresh()
+    // API logout
+    public function apiLogout()
     {
-        return $this->respondWithToken(auth('api')->refresh());
+        auth('api')->logout();
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
     // Get logged-in user
@@ -49,12 +38,13 @@ class AuthController extends Controller
         return response()->json(auth('api')->user());
     }
 
+    // Respond with JWT token
     protected function respondWithToken($token)
     {
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth('api')->factory()->getTTL() * 60
+            'token_type'   => 'bearer',
+            'expires_in'   => auth('api')->factory()->getTTL() * 60
         ]);
     }
 }

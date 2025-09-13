@@ -25,7 +25,28 @@
 <script src="{{ asset('backend/assets/js/vendors/chart.js') }}"></script>
 
 <!-- SweetAlert2 -->
-{{-- <script src="{{ asset('backend/assets/libs/sweetalert2/sweetalert2.min.js') }}"></script> --}}
+
+<!-- DataTables Bootstrap 5 CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -52,4 +73,31 @@
             timerProgressBar: true
         });
     @endif
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const toggleButton = document.getElementById('darkModeToggle');
+    const darkModeIcon = document.getElementById('darkModeIcon');
+
+    // Load saved mode
+    if(localStorage.getItem('darkMode') === 'enabled') {
+        document.body.classList.add('dark-mode');
+        darkModeIcon.dataset.feather = 'sun';
+    }
+
+    feather.replace();
+
+    toggleButton.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+
+        if(document.body.classList.contains('dark-mode')) {
+            darkModeIcon.dataset.feather = 'sun';
+            localStorage.setItem('darkMode', 'enabled');
+        } else {
+            darkModeIcon.dataset.feather = 'moon';
+            localStorage.setItem('darkMode', 'disabled');
+        }
+
+        feather.replace();
+    });
+});
 </script>
