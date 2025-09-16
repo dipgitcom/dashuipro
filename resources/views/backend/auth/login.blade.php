@@ -62,6 +62,11 @@
                 {{ __('Log in') }}
             </button>
         </div>
+         {{-- <!-- Register link (only for users) -->
+    <div class="mt-3">
+        <span class="small">Don’t have an account?</span>
+        <a href="{{ route('register') }}" class="small fw-bold text-decoration-none">Register</a>
+    </div> --}}
     </form>
 </div>
 @endsection
