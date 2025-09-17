@@ -23,7 +23,6 @@
         @csrf
         <input type="hidden" name="email" value="{{ $email }}">
 
-
         <div class="mb-3 text-start">
             <label for="otp" class="form-label">OTP Code</label>
             <input id="otp" type="text" class="form-control @error('otp') is-invalid @enderror" name="otp" required autofocus>
@@ -36,5 +35,15 @@
             <button type="submit" class="btn btn-primary">Verify OTP</button>
         </div>
     </form>
+
+    {{-- Resend OTP Option --}}
+    <div class="mt-3">
+        <form method="POST" action="{{ route('verify.otp.resend') }}">
+            @csrf
+            <input type="hidden" name="email" value="{{ $email }}">
+            <button type="submit" class="btn btn-link p-0 m-0 align-baseline">Resend OTP</button>
+        </form>
+    </div>
+
 </div>
 @endsection

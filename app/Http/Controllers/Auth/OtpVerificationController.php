@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\VerifyOtpMail;
+
 
 class OtpVerificationController extends Controller
 {
@@ -52,4 +55,32 @@ class OtpVerificationController extends Controller
 
         return redirect()->route('dashboard')->with('success', 'Your email has been verified and you are logged in.');
     }
+
+    public function resend(Request $request)
+{
+    $request->validate(['email' => 'required|email']);
+
+    $user = User::where('email', $request->email)->first();
+
+    if (!$user) {
+        return redirect()->back()->withErrors(['email' => 'User not found.']);
+    }
+
+    $otp = random_int(100000, 999999);
+
+    $user->email_otp = Hash::make($otp);
+    $user->email_otp_expires_at = now()->addMinutes(10);
+    $user->save();
+
+    try {
+        Mail::to($user->email)->send(new VerifyOtpMail($user, $otp));
+    } catch (\Exception $e) {
+        \Log::error('Failed to send OTP mail: ' . $e->getMessage());
+        return redirect()->back()->withErrors('Failed to send OTP email. Please try again later.');
+    }
+
+    return redirect()->back()->with('status', 'A new OTP has been sent to your email.');
+}
+
+
 }
