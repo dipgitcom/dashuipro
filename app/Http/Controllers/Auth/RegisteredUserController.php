@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -24,10 +25,10 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // Generate 6-digit OTP
+        // Generate 6-digit OTP securely
         $otp = random_int(100000, 999999);
 
-        // Create user without marking email verified
+        // Create user with OTP information; do not set email_verified_at
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -37,16 +38,15 @@ class RegisteredUserController extends Controller
             'email_verified_at' => null,
         ]);
 
-        // Send OTP email
-        Mail::to($user->email)->send(new VerifyOtpMail($user, $otp));
+        // Send OTP email (your Mailable should display $otp)
+        Mail::to($user->email)->send(new VerifyOtpMail($user, $otp)); 
 
-        // Store email in session for OTP verification
+        // Store verification email in session
         session(['verification_email' => $user->email]);
 
-        // **Do NOT log in yet**
-        // Auth::login($user); <- REMOVE this line
+        // Do not log in user yet (leave Auth::login commented/removed)
 
-        // Redirect to OTP form
+        // Redirect to OTP page
         return redirect()->route('verify.otp.form')
                          ->with('status', 'A verification OTP has been sent to your email.');
     }

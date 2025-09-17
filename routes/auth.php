@@ -31,6 +31,13 @@ Route::middleware('guest')->group(function () {
     Route::get('verify-otp', [PasswordOtpController::class, 'showVerifyForm'])->name('password.otp.verifyForm');
     Route::post('verify-otp', [PasswordOtpController::class, 'verifyOtp'])->name('password.otp.verify');
 
+    // Email OTP Verification for registration (should be accessible to guest)
+   Route::get('/verify-otp', [App\Http\Controllers\Auth\OtpVerificationController::class, 'showForm'])->name('verify.otp.form');
+   Route::post('/verify-otp', [App\Http\Controllers\Auth\OtpVerificationController::class, 'verify'])->name('verify.otp.verify');
+   Route::post('/verify-otp/resend', [App\Http\Controllers\Auth\OtpVerificationController::class, 'resend'])
+      ->middleware('throttle:3,1')->name('verify.otp.resend');
+
+
     // Reset new password
     Route::get('reset-password', [PasswordOtpController::class, 'showResetForm'])->name('password.reset.form');
     Route::post('reset-password', [PasswordOtpController::class, 'resetPassword'])->name('password.reset');
@@ -47,12 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
-    Route::post('/verify-otp/resend', [OtpVerificationController::class, 'resend'])
-      ->middleware('throttle:3,1')
-      ->name('verify.otp.resend');
-    Route::get('/verify-otp', [App\Http\Controllers\Auth\OtpVerificationController::class, 'showForm'])->name('verify.otp.form');
-    Route::post('/verify-otp', [App\Http\Controllers\Auth\OtpVerificationController::class, 'verify'])->name('verify.otp.verify');
-
+    
 
     // Confirm password
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');

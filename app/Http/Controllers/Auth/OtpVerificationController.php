@@ -17,7 +17,7 @@ class OtpVerificationController extends Controller
             return redirect()->route('verify.otp.form')->with('error', 'No email to verify.');
         }
 
-        return view('backend.auth.verify-otp', compact('email'));
+        return view('backend.auth.emails.verify-otp', compact('email'));
     }
 
     public function verify(Request $request)
