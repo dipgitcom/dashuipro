@@ -14,6 +14,15 @@ class DatabaseSeeder extends Seeder
     {
         // Seed roles first
         $this->call(RoleSeeder::class);
+        // Seed users next
+        $this->call(UserSeeder::class);
+        // Seed other necessary data
+        $this->call(CategorySeeder::class);
+        $this->call(PermissionSeeder::class);
+        $this->call(RoleHasPermissionSeeder::class);
+        $this->call(FaqSeeder::class);
+        $this->call(DynamicPagesSeeder::class);
+        $this->call(SettingsSeeder::class);
 
         // Seed a test user
         User::factory()->create([
