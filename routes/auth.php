@@ -47,6 +47,12 @@ Route::middleware('auth')->group(function () {
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+    Route::post('/verify-otp/resend', [OtpVerificationController::class, 'resend'])
+      ->middleware('throttle:3,1')
+      ->name('verify.otp.resend');
+    Route::get('/verify-otp', [App\Http\Controllers\Auth\OtpVerificationController::class, 'showForm'])->name('verify.otp.form');
+    Route::post('/verify-otp', [App\Http\Controllers\Auth\OtpVerificationController::class, 'verify'])->name('verify.otp.verify');
+
 
     // Confirm password
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])->name('password.confirm');

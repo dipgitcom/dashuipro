@@ -74,7 +74,7 @@ class PasswordOtpController extends Controller
     public function showResetForm(Request $request)
 {
     $email = $request->query('email');
-    return view('auth.reset-password', compact('email'));
+    return view('backend.auth.reset-password', compact('email'));
 }
 
     // Reset the password
