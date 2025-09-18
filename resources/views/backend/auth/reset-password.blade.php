@@ -20,10 +20,7 @@
             <label>Email</label>
             <input type="email" name="email" class="form-control" required>
         </div>
-        <div class="mb-3 text-start">
-            <label>OTP</label>
-            <input type="text" name="otp" class="form-control" required>
-        </div>
+        
         <div class="mb-3 text-start">
             <label>New Password</label>
             <input type="password" name="password" class="form-control" required>
